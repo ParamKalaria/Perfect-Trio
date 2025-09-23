@@ -1,0 +1,12 @@
+07/26-00:09:49.249386  [**] [1:1280:9] RPC portmap listing UDP 111 [**] [Classification: Decode of an RPC Query] [Priority: 2] {UDP} 167.94.138.154:43537 -> 194.238.16.247:111
+07/26-00:17:59.376965  [**] [1:524:8] BAD-TRAFFIC tcp port 0 traffic [**] [Classification: Misc activity] [Priority: 3] {TCP} 111.160.49.77:51438 -> 194.238.16.247:0
+07/26-00:18:00.379838  [**] [1:524:8] BAD-TRAFFIC tcp port 0 traffic [**] [Classification: Misc activity] [Priority: 3] {TCP} 111.160.49.77:51438 -> 194.238.16.247:0
+07/26-00:18:02.384227  [**] [1:524:8] BAD-TRAFFIC tcp port 0 traffic [**] [Classification: Misc activity] [Priority: 3] {TCP} 111.160.49.77:51438 -> 194.238.16.247:0
+07/26-00:18:06.387469  [**] [1:524:8] BAD-TRAFFIC tcp port 0 traffic [**] [Classification: Misc activity] [Priority: 3] {TCP} 111.160.49.77:51438 -> 194.238.16.247:0
+07/26-03:56:25.358306  [**] [1:1444:3] TFTP Get [**] [Classification: Potentially Bad Traffic] [Priority: 2] {UDP} 2a06:4880:6000::87:21292 -> 2a02:4780:12:eede::1:69
+07/26-05:51:17.521646  [**] [1:1280:9] RPC portmap listing UDP 111 [**] [Classification: Decode of an RPC Query] [Priority: 2] {UDP} 162.142.125.86:60469 -> 194.238.16.247:111
+07/26-09:24:45.932924  [**] [1:312:6] EXPLOIT ntpdx overflow attempt [**] [Classification: Attempted Administrator Privilege Gain] [Priority: 1] {UDP} 89.248.167.150:60605 -> 194.238.16.247:123
+07/26-09:52:20.243372  [**] [1:1616:7] DNS named version attempt [**] [Classification: Attempted Information Leak] [Priority: 2] {UDP} 128.199.44.180:60504 -> 194.238.16.247:53
+07/26-12:56:16.817906  [**] [1:1411:10] SNMP public access udp [**] [Classification: Attempted Information Leak] [Priority: 2] {UDP} 162.142.125.95:42516 -> 194.238.16.247:161
+07/26-12:56:16.817906  [**] [1:1417:9] SNMP request udp [**] [Classification: Attempted Information Leak] [Priority: 2] {UDP} 162.142.125.95:42516 -> 194.238.16.247:161
+07/26-14:04:08.877691  [**] [1:1444:3] TFTP Get [**] [Classification: Potentially Bad Traffic] [Priority: 2] {UDP} 194.187.179.58:57313 -> 194.238.16.247:69
