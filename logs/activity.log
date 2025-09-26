@@ -1,0 +1,4 @@
+2025-09-26 22:29:34 [INFO] Thread 'AuthThread' started
+2025-09-26 22:29:34 [INFO] Auth DB update completed
+2025-09-26 22:29:34 [INFO] Thread 'AuthThread' stopped
+2025-09-26 22:29:58 [INFO] Main thread interrupted. Shutting down.
