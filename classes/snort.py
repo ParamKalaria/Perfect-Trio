@@ -4,7 +4,7 @@ import sqlite3
 from collections import Counter
 
 class Snort:
-    def __init__(self, log_path="log/snort.alert.fast", threshold=5, db_root="db", db_subfolder="snort_logs", db_name="snort_data.db"):
+    def __init__(self, log_path="./log/snort.alert.fast", threshold=5, db_root="db", db_subfolder="snort_logs", db_name="snort_data.db"):
         self.log_path = log_path
         self.threshold = threshold
         self.db_folder = os.path.join(db_root, db_subfolder)
@@ -23,47 +23,50 @@ class Snort:
                     ip TEXT PRIMARY KEY,
                     count INTEGER,
                     classification TEXT,
+                    protocol TEXT,
                     status TEXT
                 )
             """)
 
     def parse_alerts(self):
         ip_counter = Counter()
-        classifications = {}
+        details = {}
 
         if not os.path.isfile(self.log_path):
             return {}, {}
 
-        current_class = None
-
         with open(self.log_path, "r") as file:
             for line in file:
-                if "[**]" in line:
-                    class_match = re.search(r"\[\*\*\] \[.*?\] (.*?) \[\*\*\]", line)
-                    if class_match:
-                        current_class = class_match.group(1).strip()
+                class_match = re.search(r"\[Classification: (.*?)\]", line)
+                proto_match = re.search(r"\{(\w+)\}", line)
+                src_match = re.search(r"\{.*?\}\s+(\d{1,3}(?:\.\d{1,3}){3}):\d+\s+->", line)
 
-                if "->" in line:
-                    ip_match = re.search(r"(\d{1,3}(?:\.\d{1,3}){3})\s+->", line)
-                    if ip_match:
-                        ip = ip_match.group(1)
-                        ip_counter[ip] += 1
-                        if ip not in classifications:
-                            classifications[ip] = current_class
+                if class_match and proto_match and src_match:
+                    classification = class_match.group(1).strip()
+                    protocol = proto_match.group(1).strip()
+                    ip = src_match.group(1)
 
-        return dict(ip_counter), classifications
+                    ip_counter[ip] += 1
+                    if ip not in details:
+                        details[ip] = {
+                            "classification": classification,
+                            "protocol": protocol
+                        }
+
+        return dict(ip_counter), details
 
     def store_to_db(self):
-        ip_counts, classifications = self.parse_alerts()
+        ip_counts, details = self.parse_alerts()
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             for ip, count in ip_counts.items():
                 cursor.execute("SELECT 1 FROM snort_alerts WHERE ip = ?", (ip,))
                 if cursor.fetchone() is None:
-                    classification = classifications.get(ip, "Unknown")
+                    classification = details[ip]["classification"]
+                    protocol = details[ip]["protocol"]
                     status = "attack" if count > self.threshold else "normal"
                     cursor.execute("""
-                        INSERT INTO snort_alerts (ip, count, classification, status)
-                        VALUES (?, ?, ?, ?)
-                    """, (ip, count, classification, status))
+                        INSERT INTO snort_alerts (ip, count, classification, protocol, status)
+                        VALUES (?, ?, ?, ?, ?)
+                    """, (ip, count, classification, protocol, status))
             conn.commit()
