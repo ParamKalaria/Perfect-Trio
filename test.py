@@ -1,36 +1,64 @@
-import re
-from collections import Counter
+import tkinter as tk
+from tkinter import ttk
+import threading
+import time
 
-def parse_alerts(log_path="./log/snort.alert.fast", threshold=2):
-    ip_counter = Counter()
-    classifications = {}
+# Simulated system modules
+def run_auth():
+    update_status("Auth", "Running")
+    time.sleep(5)
+    update_status("Auth", "Stopped")
 
-    current_class = None
+def run_snort():
+    update_status("Snort", "Running")
+    time.sleep(5)
+    update_status("Snort", "Stopped")
 
-    try:
-        with open(log_path, "r") as file:
-            for line in file:
-                if "[**]" in line:
-                    class_match = re.search(r"\[\*\*\] \[.*?\] (.*?) \[\*\*\]", line)
-                    if class_match:
-                        current_class = class_match.group(1).strip()
+def run_ufw():
+    update_status("UFW", "Running")
+    time.sleep(5)
+    update_status("UFW", "Stopped")
 
-                if "->" in line:
-                    ip_match = re.search(r"(\d{1,3}(?:\.\d{1,3}){3})\s+->", line)
-                    if ip_match:
-                        ip = ip_match.group(1)
-                        ip_counter[ip] += 1
-                        if ip not in classifications:
-                            classifications[ip] = current_class
-    except FileNotFoundError:
-        print(f"❌ Log file not found: {log_path}")
-        return
+def run_analyzer():
+    update_status("Analyzer", "Running")
+    time.sleep(5)
+    update_status("Analyzer", "Stopped")
 
-    print("\n📊 Snort Alert Summary:")
-    for ip, count in ip_counter.items():
-        classification = classifications.get(ip, "Unknown")
-        status = "ATTACK" if count > threshold else "NORMAL"
-        print(f"IP: {ip} | Count: {count} | Classification: {classification} | Status: {status}")
+# GUI setup
+root = tk.Tk()
+root.title("SOC Thread Dashboard")
 
-if __name__ == "__main__":
-    parse_alerts()
+status_labels = {}
+
+def update_status(system, status):
+    status_labels[system].config(text=f"Status: {status}")
+
+def start_thread(system, target):
+    update_status(system, "Starting...")
+    threading.Thread(target=target).start()
+
+def stop_thread(system):
+    update_status(system, "Stopped (manual)")
+
+systems = {
+    "Auth": run_auth,
+    "Snort": run_snort,
+    "UFW": run_ufw,
+    "Analyzer": run_analyzer
+}
+
+for i, (name, func) in enumerate(systems.items()):
+    frame = ttk.LabelFrame(root, text=name)
+    frame.grid(row=i, column=0, padx=10, pady=5, sticky="ew")
+
+    status = ttk.Label(frame, text="Status: Idle")
+    status.grid(row=0, column=0, padx=5)
+    status_labels[name] = status
+
+    start_btn = ttk.Button(frame, text="Start", command=lambda n=name, f=func: start_thread(n, f))
+    start_btn.grid(row=0, column=1, padx=5)
+
+    stop_btn = ttk.Button(frame, text="Stop", command=lambda n=name: stop_thread(n))
+    stop_btn.grid(row=0, column=2, padx=5)
+
+root.mainloop()
