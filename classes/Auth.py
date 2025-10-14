@@ -4,7 +4,7 @@ import sqlite3
 from collections import Counter
 
 class Auth:
-    def __init__(self, log_path="log/auth.log", threshold=5, db_root="db", db_subfolder="auth_logs", db_name="auth_data.db"):
+    def __init__(self, log_path="./log/auth.log", threshold=5, db_root="db", db_subfolder="auth_logs", db_name="auth_data.db"):
         self.log_path = log_path
         self.threshold = threshold
         self.db_folder = os.path.join(db_root, db_subfolder)
