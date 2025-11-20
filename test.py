@@ -8,7 +8,7 @@ import sqlite3
 import subprocess
 
 root = tk.Tk()
-root.title("SOC Thread Dashboard")
+root.title("Perfect Trio")
 
 status_labels = {}
 running_labels = {}
@@ -78,7 +78,7 @@ for i, (name, func) in enumerate(systems.items()):
 
 # Menu bar
 def show_about():
-    messagebox.showinfo("About", "SOC Thread Dashboard\nVersion 1.0\nBuilt by Param Kalaria")
+    messagebox.showinfo("About", "Perfect Trio\nVersion 1.0\nBuilt by Param Kalaria")
 
 def show_help():
     messagebox.showinfo("Help", "Start or stop each system thread.\nMonitor status and runtime.\nUse Options for analysis, logs, and DB.")

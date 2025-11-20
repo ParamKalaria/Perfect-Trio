@@ -4,17 +4,18 @@ import sqlite3
 from collections import Counter
 
 class UFW:
-    def __init__(self, log_path="./log/ufw.log", threshold=5, db_root="db", db_subfolder="ufw_logs", db_name="ufw_data.db"):
-        self.log_path = log_path
-        self.threshold = threshold
-        self.db_folder = os.path.join(db_root, db_subfolder)
-        self.db_path = os.path.join(self.db_folder, db_name)
-        self._ensure_folder()
+    def __init__(self, config):
+        self.log_path = config.get("log_path")
+        self.threshold = config.get("threshold")
+        db_root = config.get("db_root")
+        db_name = config.get("db_name")
+        self.db_path = os.path.join(db_root, db_name)
+        self._ensure_folder(db_root)
         self._init_db()
 
-    def _ensure_folder(self):
-        if not os.path.exists(self.db_folder):
-            os.makedirs(self.db_folder)
+    def _ensure_folder(self, folder):
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
     def _init_db(self):
         with sqlite3.connect(self.db_path) as conn:
@@ -61,14 +62,13 @@ class UFW:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             for ip, count in ip_counts.items():
-                cursor.execute("SELECT 1 FROM ufw_alerts WHERE ip = ?", (ip,))
-                if cursor.fetchone() is None:
-                    proto = details[ip]["proto"]
-                    spt = details[ip]["spt"]
-                    dpt = details[ip]["dpt"]
-                    status = "attack" if count > self.threshold else "normal"
-                    cursor.execute("""
-                        INSERT INTO ufw_alerts (ip, count, proto, spt, dpt, status)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    """, (ip, count, proto, spt, dpt, status))
+                proto = details[ip]["proto"]
+                spt = details[ip]["spt"]
+                dpt = details[ip]["dpt"]
+                status = "attack" if count > self.threshold else "normal"
+                cursor.execute("""
+                    INSERT INTO ufw_alerts (ip, count, proto, spt, dpt, status)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(ip) DO UPDATE SET count=excluded.count, proto=excluded.proto, spt=excluded.spt, dpt=excluded.dpt, status=excluded.status
+                """, (ip, count, proto, spt, dpt, status))
             conn.commit()

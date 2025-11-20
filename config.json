@@ -1,17 +1,27 @@
 {
-  "interval_minutes": 15,
-  "analyzer_interval_minutes": 60,
-  "modules": {
-    "auth": true,
-    "snort": true,
-    "ufw": true,
-    "analyzer": true
+  "auth": {
+    "log_path": "./log/auth.log",
+    "threshold": 5,
+    "db_root": "db",
+    "db_name": "auth_data.db"
   },
-  "log_path": "logs/activity.log",
-  "db_paths": {
-    "auth": "db/auth_logs/auth_data.db",
-    "snort": "db/snort_logs/snort_data.db",
-    "ufw": "db/ufw_logs/ufw_data.db",
-    "analyzer": "db/threat_analysis/threats.db"
+  "snort": {
+    "log_path": "./log/snort.alert.fast",
+    "threshold": 5,
+    "db_root": "db",
+    "db_name": "snort_data.db"
+  },
+  "ufw": {
+    "log_path": "./log/ufw.log",
+    "threshold": 5,
+    "db_root": "db",
+    "db_name": "ufw_data.db"
+  },
+  "analyzer": {
+    "auth_db": "db/auth_data.db",
+    "snort_db": "db/snort_data.db",
+    "ufw_db": "db/ufw_data.db",
+    "analysis_folder": "db",
+    "analysis_db": "threats.db"
   }
 }

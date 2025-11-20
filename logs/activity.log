@@ -1,28 +1,29 @@
-2025-10-15 00:31:08 [INFO] Thread 'Auth' started
-2025-10-15 00:31:08 [INFO] Thread 'Snort' started
-2025-10-15 00:31:08 [INFO] Thread 'UFW' started
-2025-10-15 00:31:08 [INFO] Thread 'Analyzer' started
-2025-10-15 00:31:08 [INFO] Threat analysis DB updated successfully
-2025-10-15 00:31:08 [INFO] Threat analysis DB updated
-2025-10-15 00:31:08 [INFO] Thread 'Analyzer' stopped
-2025-10-15 00:31:08 [INFO] Auth DB update completed
-2025-10-15 00:31:08 [INFO] Thread 'Auth' stopped
-2025-10-15 00:31:09 [INFO] Snort DB update completed
-2025-10-15 00:31:09 [INFO] Thread 'Snort' stopped
-2025-10-15 00:31:09 [INFO] UFW DB update completed
-2025-10-15 00:31:09 [INFO] Thread 'UFW' stopped
-2025-10-15 00:33:29 [INFO] Main thread interrupted. Shutting down.
-2025-10-15 00:33:30 [INFO] Thread 'Auth' started
-2025-10-15 00:33:30 [INFO] Thread 'Snort' started
-2025-10-15 00:33:30 [INFO] Thread 'UFW' started
-2025-10-15 00:33:30 [INFO] Thread 'Analyzer' started
-2025-10-15 00:33:30 [INFO] Auth DB update completed
-2025-10-15 00:33:30 [INFO] Thread 'Auth' stopped
-2025-10-15 00:33:31 [INFO] Snort DB update completed
-2025-10-15 00:33:31 [INFO] Thread 'Snort' stopped
-2025-10-15 00:33:31 [INFO] Threat analysis DB updated successfully
-2025-10-15 00:33:31 [INFO] Threat analysis DB updated
-2025-10-15 00:33:31 [INFO] Thread 'Analyzer' stopped
-2025-10-15 00:33:32 [INFO] UFW DB update completed
-2025-10-15 00:33:32 [INFO] Thread 'UFW' stopped
-2025-10-15 00:35:14 [INFO] Main thread interrupted. Shutting down.
+2025-11-21 00:05:18 [INFO] Thread 'Auth' started
+2025-11-21 00:05:18 [INFO] Thread 'Snort' started
+2025-11-21 00:05:18 [INFO] Thread 'UFW' started
+2025-11-21 00:05:18 [INFO] Thread 'Analyzer' started
+2025-11-21 00:05:18 [ERROR] Snort error: [WinError 183] Cannot create a file when that file already exists: 'db'
+2025-11-21 00:05:18 [INFO] Thread 'Snort' stopped
+2025-11-21 00:05:18 [ERROR] Analyzer DB read error from db/snort_data.db: no such table: snort_alerts
+2025-11-21 00:05:18 [INFO] Threat analysis DB updated successfully
+2025-11-21 00:05:18 [INFO] Threat analysis DB updated
+2025-11-21 00:05:18 [INFO] Thread 'Analyzer' stopped
+2025-11-21 00:05:18 [INFO] Auth DB update completed
+2025-11-21 00:05:18 [INFO] Thread 'Auth' stopped
+2025-11-21 00:05:18 [INFO] UFW DB update completed
+2025-11-21 00:05:18 [INFO] Thread 'UFW' stopped
+2025-11-21 00:05:42 [INFO] Main thread interrupted. Shutting down.
+2025-11-21 00:05:43 [INFO] Thread 'Auth' started
+2025-11-21 00:05:43 [INFO] Thread 'Snort' started
+2025-11-21 00:05:43 [INFO] Thread 'UFW' started
+2025-11-21 00:05:43 [INFO] Thread 'Analyzer' started
+2025-11-21 00:05:43 [INFO] Auth DB update completed
+2025-11-21 00:05:43 [INFO] Thread 'Auth' stopped
+2025-11-21 00:05:44 [INFO] Snort DB update completed
+2025-11-21 00:05:44 [INFO] Thread 'Snort' stopped
+2025-11-21 00:05:44 [INFO] UFW DB update completed
+2025-11-21 00:05:44 [INFO] Thread 'UFW' stopped
+2025-11-21 00:05:44 [INFO] Threat analysis DB updated successfully
+2025-11-21 00:05:44 [INFO] Threat analysis DB updated
+2025-11-21 00:05:44 [INFO] Thread 'Analyzer' stopped
+2025-11-21 00:18:09 [INFO] Main thread interrupted. Shutting down.

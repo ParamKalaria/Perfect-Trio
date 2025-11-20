@@ -1,5 +1,6 @@
 import time
 import threading
+import json
 from datetime import datetime, timedelta
 
 from classes.Auth import Auth
@@ -11,10 +12,14 @@ from classes.logger import Logger
 logger = Logger()
 last_analysis = datetime.min  # Track last Analyzer run
 
+# Load config.json once
+with open("config.json", "r") as f:
+    config = json.load(f)
+
 def run_auth():
     logger.thread_event("Auth", "started")
     try:
-        auth = Auth()
+        auth = Auth(config["auth"])
         auth.store_to_db()
         logger.info("Auth DB update completed")
     except Exception as e:
@@ -24,7 +29,7 @@ def run_auth():
 def run_snort():
     logger.thread_event("Snort", "started")
     try:
-        snort = Snort()
+        snort = Snort(config["snort"])
         snort.store_to_db()
         logger.info("Snort DB update completed")
     except Exception as e:
@@ -34,7 +39,7 @@ def run_snort():
 def run_ufw():
     logger.thread_event("UFW", "started")
     try:
-        ufw = UFW()
+        ufw = UFW(config["ufw"])
         ufw.store_to_db()
         logger.info("UFW DB update completed")
     except Exception as e:
@@ -44,7 +49,7 @@ def run_ufw():
 def run_analysis():
     logger.thread_event("Analyzer", "started")
     try:
-        analyzer = Analyzer()
+        analyzer = Analyzer(config["analyzer"])
         analyzer.analyze()
         logger.info("Threat analysis DB updated")
     except Exception as e:

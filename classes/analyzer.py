@@ -3,19 +3,13 @@ import sqlite3
 from classes.logger import Logger
 
 class Analyzer:
-    def __init__(self,
-                 auth_db="db/auth_logs/auth_data.db",
-                 snort_db="db/snort_logs/snort_data.db",
-                 ufw_db="db/ufw_logs/ufw_data.db",
-                 analysis_folder="db/threat_analysis",
-                 analysis_db="threats.db"):
-
+    def __init__(self, config):
         self.logger = Logger()
-        self.auth_db = auth_db
-        self.snort_db = snort_db
-        self.ufw_db = ufw_db
-        self.analysis_folder = analysis_folder
-        self.analysis_path = os.path.join(analysis_folder, analysis_db)
+        self.auth_db = config.get("auth_db")
+        self.snort_db = config.get("snort_db")
+        self.ufw_db = config.get("ufw_db")
+        self.analysis_folder = config.get("analysis_folder")
+        self.analysis_path = os.path.join(self.analysis_folder, config.get("analysis_db"))
         self._ensure_folder()
         self._init_db()
 

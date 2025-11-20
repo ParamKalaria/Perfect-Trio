@@ -4,17 +4,18 @@ import sqlite3
 from collections import Counter
 
 class Snort:
-    def __init__(self, log_path="./log/snort.alert.fast", threshold=5, db_root="db", db_subfolder="snort_logs", db_name="snort_data.db"):
-        self.log_path = log_path
-        self.threshold = threshold
-        self.db_folder = os.path.join(db_root, db_subfolder)
-        self.db_path = os.path.join(self.db_folder, db_name)
-        self._ensure_folder()
+    def __init__(self, config):
+        self.log_path = config.get("log_path")
+        self.threshold = config.get("threshold")
+        db_root = config.get("db_root")
+        db_name = config.get("db_name")
+        self.db_path = os.path.join(db_root, db_name)
+        self._ensure_folder(db_root)
         self._init_db()
 
-    def _ensure_folder(self):
-        if not os.path.exists(self.db_folder):
-            os.makedirs(self.db_folder)
+    def _ensure_folder(self, folder):
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
     def _init_db(self):
         with sqlite3.connect(self.db_path) as conn:
@@ -60,13 +61,12 @@ class Snort:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             for ip, count in ip_counts.items():
-                cursor.execute("SELECT 1 FROM snort_alerts WHERE ip = ?", (ip,))
-                if cursor.fetchone() is None:
-                    classification = details[ip]["classification"]
-                    protocol = details[ip]["protocol"]
-                    status = "attack" if count > self.threshold else "normal"
-                    cursor.execute("""
-                        INSERT INTO snort_alerts (ip, count, classification, protocol, status)
-                        VALUES (?, ?, ?, ?, ?)
-                    """, (ip, count, classification, protocol, status))
+                classification = details[ip]["classification"]
+                protocol = details[ip]["protocol"]
+                status = "attack" if count > self.threshold else "normal"
+                cursor.execute("""
+                    INSERT INTO snort_alerts (ip, count, classification, protocol, status)
+                    VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT(ip) DO UPDATE SET count=excluded.count, classification=excluded.classification, protocol=excluded.protocol, status=excluded.status
+                """, (ip, count, classification, protocol, status))
             conn.commit()
