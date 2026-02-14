@@ -1,15 +1,21 @@
 import os
 import re
 import sqlite3
+import sys
 from collections import Counter
 
 class UFW:
     def __init__(self, config):
         self.log_path = config.get("log_path")
         self.threshold = config.get("threshold")
-        db_root = config.get("db_root")
-        db_name = config.get("db_name")
-        self.db_path = os.path.join(db_root, db_name)
+        
+        if getattr(sys, 'frozen', False):
+            base_dir = os.path.dirname(sys.executable)
+        else:
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            
+        db_root = os.path.join(base_dir, "db")
+        self.db_path = os.path.join(db_root, "ufw_data.db")
         self._ensure_folder(db_root)
         self._init_db()
 
